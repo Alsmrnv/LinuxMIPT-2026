@@ -86,6 +86,21 @@ exec setsid sh -c 'exec sh </dev/ttyS0 >/dev/ttyS0 2>&1'
 
 **Note.** Если вдруг возникает kernel panick, попробуйте увеличить размер оперативки до 2048 (-m 2048)
 
+4. Запускаем мессенджер и загружаем модуль:
+
+```
+# ./messenger.dist/messenger.bin &
+# insmod tg_dev.ko
+```
+
+5. Проверяем работу файлового интерфейса:
+
+```
+# echo "hello" > /dev/telegram/chat_1
+# cat /dev/telegram/chat_1
+```
+
+
 ## Архитектура
 
 1. Программа `messenger.py` эмулирует мессенджер. Она работает в фоновом режиме и обрабатывает запросы от kernel space.
