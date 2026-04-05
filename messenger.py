@@ -3,10 +3,6 @@ import sys
 import time
 
 
-# протокол взаимодействия
-# kernel space -> user space: cmd <id> (<msg>)
-# user space -> kernel space: - ERROR: txt при ошибке
-#                             - txt  иначе
 read_fifo_path = "/tmp/module_reqs"
 write_fifo_path = "/tmp/messenger_resps"
 
