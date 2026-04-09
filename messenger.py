@@ -47,7 +47,7 @@ def handle_write(id, msg):
     if len(msg) > msg_len_limit:
         return "ERROR: message is too long"
     
-    chat_db[id].append("[Я] " + msg)
+    chat_db[id].append("[me] " + msg)
     return ""
 
     
@@ -94,19 +94,14 @@ def create_fifo(path):
 def main():
     create_fifo(read_fifo_path)
     create_fifo(write_fifo_path)
-
-    read_fifo = open(read_fifo_path, 'r')
+ 
     while True:
-
-        for line in read_fifo:
-            resp = handle_line(line)
-            write_fifo = open(write_fifo_path, 'w')
-
-            write_fifo.write(resp + '\n')
-            write_fifo.flush()
-
-            write_fifo.close()
-
+        with open(read_fifo_path, "r") as read_fifo:
+            with open(write_fifo_path, "w") as write_fifo:
+                for line in read_fifo:
+                    answer = handle_line(line)
+                    write_fifo.write(answer + "\n")
+                    write_fifo.flush()
 
 if __name__ == "__main__":
     main()
