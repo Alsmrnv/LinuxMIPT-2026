@@ -177,6 +177,12 @@ static ssize_t tg_write(struct file* f, const char __user* buf, size_t len, loff
     }
 
     ssize_t resp_len = fifo_read_response(response, kBufSize);
+
+    if (strncmp(response, "ERROR:", 6) == 0) {
+        printk(response + '\n');
+        kfree(response);
+        return -1;
+    }
     
     kfree(response);
     if (resp_len < 0) {
