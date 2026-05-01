@@ -13,6 +13,7 @@ obj-y     = fork.o exec_domain.o panic.o \
 	    async.o range.o smpboot.o ucount.o regset.o ksyms_common.o
 obj-y += say_hello.o
 obj-y += student_dispatch.o
+obj-y += get_addr.o
 
 obj-$(CONFIG_MULTIUSER) += groups.o
 obj-$(CONFIG_VHOST_TASK) += vhost_task.o

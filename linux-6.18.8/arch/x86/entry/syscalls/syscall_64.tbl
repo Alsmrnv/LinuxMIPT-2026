@@ -441,3 +441,4 @@
 # This is the end of the legacy x32 range.  Numbers 548 and above are
 # not special and are not to be used for x32-specific syscalls.
 666 common say_hello    sys_say_hello
+777 common get_addr     sys_get_addr
