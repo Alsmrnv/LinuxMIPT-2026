@@ -7,7 +7,7 @@ SYSCALL_DEFINE1(get_addr, unsigned long, v_addr)
 {
     struct mm_struct* mm = current->mm;
     if (!mm) {
-        // TODO
+        return -ESRCH;
     }
 
     pgd_t* pgd;
@@ -16,13 +16,35 @@ SYSCALL_DEFINE1(get_addr, unsigned long, v_addr)
     pmd_t* pmd;
     pte_t* pte;
 
-
     pgd = pgd_offset(mm, v_addr);
+    if (pgd_none(*pgd) || pgd_bad(*pgd)) {
+        return -EINVAL;
+    }
+
     p4d = p4d_offset(pgd, v_addr);
+    if (p4d_none(*p4d) || p4d_bad(*p4d)) {
+        return -EINVAL;
+    }
+
     pud = pud_offset(p4d, v_addr);
+    if (pud_none(*pud) || pud_bad(*pud)) {
+        return -EINVAL;
+    }
+
     pmd = pmd_offset(pud, v_addr);
+    if (pmd_none(*pmd) || pmd_bad(*pmd)) {
+        return -EINVAL;
+    }
 
     pte = pte_offset_map(pmd, v_addr);
+    if (!pte) {
+        return -EINVAL;
+    }
+
+    if (!pte_present(*pte)) {
+        pte_unmap(pte);
+        return -EINVAL;
+    }
 
     struct page* page = pte_page(*pte);
     unsigned long offset = v_addr & ~PAGE_MASK;
